@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QuizUp Estudos</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f2ff;--card:#fff;--ink:#1e1b3a;--mut:#5b5880;--pri:#5b3df5;--pri2:#2f6bff;--yel:#ffc21a;--yelink:#5a4200;--ok:#12805c;--okbg:#dcf7ea;--er:#c0262d;--erbg:#ffe3e3;--line:#dcd8f5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#15122b;--card:#221d45;--ink:#f3f1ff;--mut:#b7b2e0;--pri:#8b74ff;--line:#3a3466;--okbg:#0f3b2c;--erbg:#4a1c22;--ok:#5be0a8;--er:#ff8f96}}
+:root[data-theme=dark]{--bg:#15122b;--card:#221d45;--ink:#f3f1ff;--mut:#b7b2e0;--pri:#8b74ff;--line:#3a3466;--okbg:#0f3b2c;--erbg:#4a1c22;--ok:#5be0a8;--er:#ff8f96}
+[data-hc=on]{--mut:var(--ink);--line:var(--ink)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;font-weight:600;font-size:17px;line-height:1.45}
+body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1,h2,h3{margin:0;font-weight:900;line-height:1.15}h1{font-size:1.7rem}h2{font-size:1.3rem;margin:20px 0 10px}h3{font-size:1.05rem}
+p{margin:4px 0}.mut{color:var(--mut)}.row{display:flex;gap:10px;align-items:center}.sp{justify-content:space-between}.wrap{flex-wrap:wrap}.g{display:grid;gap:12px}.g2{grid-template-columns:1fr 1fr}
+.card{background:var(--card);border-radius:22px;padding:16px;border:2px solid var(--line)}
+a{color:inherit;text-decoration:none}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 22px;border-radius:16px;border:0;font:inherit;font-weight:900;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--pri),var(--pri2));width:100%;transition:transform .15s}
+.btn:active{transform:scale(.97)}.btn.y{background:var(--yel);color:var(--yelink)}.btn.o{background:none;color:var(--pri);border:2px solid var(--pri)}.btn.s{width:auto;min-height:44px}.btn:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+.hero{background:linear-gradient(135deg,#5b3df5,#2f6bff);color:#fff;border:0}
+.bar{height:14px;border-radius:9px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--pri),var(--pri2));transition:width .6s}.bar.y i{background:var(--yel)}.hero .bar{background:#ffffff40}.hero .bar i{background:var(--yel)}
+.chip{min-height:44px;padding:0 16px;border-radius:22px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:800;cursor:pointer;display:inline-flex;align-items:center}
+.chip.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.ico{font-size:1.9rem;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--bg);flex:none}
+.pts{background:var(--yel);color:var(--yelink);border-radius:20px;padding:2px 12px;font-weight:900;display:inline-block}
+input,select{width:100%;min-height:52px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);padding:0 14px;font:inherit;margin:6px 0}
+label{font-weight:800;font-size:.95rem}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:2px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:9}
+nav[hidden]{display:none}
+nav a{flex:1;max-width:110px;min-height:56px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;color:var(--mut)}nav a b{font-size:1.4rem;line-height:1}nav a.on{color:var(--pri);background:var(--bg)}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;width:100%;min-height:56px;padding:10px 14px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;cursor:pointer;margin-bottom:10px}
+.opt span{width:34px;height:34px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-weight:900;flex:none}
+.opt.on{border-color:var(--pri);background:var(--bg)}.opt.on span{background:var(--pri);color:#fff}
+.fb{border-radius:22px;padding:18px;text-align:center;animation:pop .5s}.fb.ok{background:var(--okbg);color:var(--ok)}.fb.er{background:var(--erbg);color:var(--er)}.fb .big{font-size:3.4rem}
+@keyframes pop{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+.med{text-align:center}.med .ico{margin:0 auto 6px;width:64px;height:64px;font-size:2.2rem;background:#fff1b8}.med.lock .ico{filter:grayscale(1);opacity:.45;background:var(--line)}
+.cols{display:flex;align-items:flex-end;gap:8px;height:130px}.cols div{flex:1;text-align:center;font-size:.8rem;display:flex;flex-direction:column;justify-content:flex-end;height:100%}.cols i{display:block;min-height:4px;border-radius:10px 10px 0 0;background:linear-gradient(var(--pri2),var(--pri))}
+.empty{text-align:center;padding:24px 16px}.empty .ico{margin:0 auto 8px;font-size:2.4rem}
+.ava{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#5b3df5,#2f6bff);color:#fff;display:grid;place-items:center;font-size:2.6rem;font-weight:900;margin:0 auto 8px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(min-width:700px){.g3{grid-template-columns:repeat(3,1fr)}}
+</style></head><body>
+<main id="app"></main><nav id="nav" hidden></nav>
+<script>
+const $=s=>document.querySelector(s);
+const K="quizup-v1";let DB;try{DB=JSON.parse(localStorage.getItem(K))}catch(e){}DB=DB||{u:null,h:[]};
+const sv=()=>{try{localStorage.setItem(K,JSON.stringify(DB))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=()=>new Date().toLocaleDateString("sv"),ago=n=>new Date(Date.now()-n*864e5).toLocaleDateString("sv");
+const XP=()=>DB.h.reduce((a,h)=>a+(h.ok?30:5),0),LV=()=>Math.floor(XP()/500)+1;
+const acc=a=>a.length?Math.round(a.filter(h=>h.ok).length/a.length*100):0;
+function streak(){const s=new Set(DB.h.map(h=>h.d));let n=0,i=s.has(today())?0:1;while(s.has(ago(i))){n++;i++}return n}
+const D=[["Matemática","🧮"],["Português","📖"],["Redação","✍️"],["Física","⚡"],["Química","🧪"],["Biologia","🧬"],["História","🏛️"],["Geografia","🌎"],["Filosofia/Sociologia","💭"],["Inglês","🇬🇧"]];
+const IC=Object.fromEntries(D);
+/* Questões autorais no estilo ENEM (não são provas oficiais). Adicione mais neste array. */
+let Q=[
+{id:1,d:"Matemática",t:"Porcentagem",f:"Fácil",g:"Estilo ENEM",q:"Uma loja aumentou o preço de um produto de R$ 80,00 para R$ 92,00. Qual foi o percentual de aumento?",o:["10%","12%","15%","18%","20%"],c:2,e:"O aumento foi 92 − 80 = R$ 12,00. Em relação ao preço original: 12 ÷ 80 = 0,15, ou seja, 15%."},
+{id:2,d:"Matemática",t:"Perímetro",f:"Média",g:"Reforço",q:"Um terreno retangular de 12 m por 8 m será cercado com 3 voltas de arame. Quantos metros de arame serão necessários?",o:["40 m","80 m","96 m","120 m","240 m"],c:3,e:"O perímetro é 2 × (12 + 8) = 40 m. Com 3 voltas: 3 × 40 = 120 m."},
+{id:3,d:"Biologia",t:"Citologia",f:"Fácil",g:"Estilo ENEM",q:"Em uma planta, a conversão de energia luminosa em energia química, com produção de glicose, ocorre principalmente em qual organela?",o:["Mitocôndrias","Ribossomos","Lisossomos","Cloroplastos","Complexo de Golgi"],c:3,e:"A fotossíntese acontece nos cloroplastos, que contêm clorofila. As mitocôndrias realizam a respiração celular."},
+{id:4,d:"Física",t:"Cinemática",f:"Média",g:"Estilo ENEM",q:"Um carro percorre 150 km em 2 horas. Qual é a sua velocidade média, em m/s?",o:["15,0","18,5","25,0","75,0","20,8"],c:4,e:"v = 150 ÷ 2 = 75 km/h. Para converter em m/s, divida por 3,6: 75 ÷ 3,6 ≈ 20,8 m/s."},
+{id:5,d:"Química",t:"Quantidade de matéria",f:"Média",g:"Reforço",q:"Quantos mols de NaCl existem em 117 g dessa substância? (massa molar do NaCl = 58,5 g/mol)",o:["0,5 mol","1 mol","2 mol","3 mol","4 mol"],c:2,e:"n = massa ÷ massa molar = 117 ÷ 58,5 = 2 mol."},
+{id:6,d:"Português",t:"Funções da linguagem",f:"Fácil",g:"Estilo ENEM",q:"Na placa “Cuidado! Piso molhado. Não corra.”, predomina qual função da linguagem?",o:["Emotiva","Referencial","Poética","Conativa","Metalinguística"],c:3,e:"A função conativa (apelativa) busca influenciar o comportamento do leitor, por isso usa verbos no imperativo."},
+{id:7,d:"História",t:"Era Vargas",f:"Fácil",g:"Reforço",q:"A Consolidação das Leis do Trabalho (CLT), de 1943, foi criada durante o governo de:",o:["Deodoro da Fonseca","Getúlio Vargas","Juscelino Kubitschek","Jânio Quadros","Ernesto Geisel"],c:1,e:"A CLT foi instituída em 1943, no Estado Novo, governo de Getúlio Vargas."},
+{id:8,d:"Geografia",t:"Biomas brasileiros",f:"Média",g:"Estilo ENEM",q:"Qual bioma brasileiro tem árvores de troncos retorcidos, solos ácidos e estações seca e chuvosa bem definidas?",o:["Caatinga","Pampa","Cerrado","Mata Atlântica","Pantanal"],c:2,e:"Essas são características do Cerrado, savana brasileira típica do Brasil central."}];
+const MD=[["🥇","Primeira vitória","Acerte 1 questão",()=>DB.h.filter(h=>h.ok).length*100],["🔥","7 dias seguidos","Estude 7 dias em sequência",()=>streak()/7*100],["💯","100 questões","Responda 100 questões",()=>DB.h.length],["🎯","50 acertos","Acerte 50 questões",()=>DB.h.filter(h=>h.ok).length*2],["🌟","Nível 5","Chegue ao nível 5",()=>(LV()-1)*25],["📚","Explorador","Responda em 5 disciplinas",()=>new Set(DB.h.map(h=>h.c)).size*20]];
+const pc=m=>Math.min(100,Math.round(m[3]())),unl=()=>MD.filter(m=>pc(m)>=100).map(m=>m[1]);
+const S={ids:[],i:0,sc:0,ok:0,sk:0,sel:null,left:90,tm:null,last:null,un0:[],xp0:0},F={q:"",d:"Todas",f:"Todas",g:"Todas"};
+const bar=(p,c="")=>`<div class="bar ${c}" role="progressbar" aria-valuenow="${p}" aria-valuemin="0" aria-valuemax="100"><i style="width:${p}%"></i></div>`;
+const med=m=>{const p=pc(m),l=p<100;return`<div class="card med ${l?"lock":""}"><div class="ico">${m[0]}</div><h3>${m[1]}</h3><p class="mut" style="font-size:.85rem">${m[2]}</p>${bar(p,"y")}<p style="font-size:.85rem">${l?p+"%":"Desbloqueada"}</p></div>`};
+const empty=(i,t,b,r)=>`<div class="card empty"><div class="ico">${i}</div><p>${t}</p>${b?`<a class="btn s" style="display:inline-flex;margin-top:8px" href="#${r}">${b}</a>`:""}</div>`;
+const NAV=[["home","🏠","Início"],["disc","📚","Disciplinas"],["bank","📝","Questões"],["rank","🏆","Ranking"],["perfil","👤","Perfil"]];
+const dq=d=>Q.filter(q=>q.d===d);
+const R={
+login(){return`<div style="text-align:center;margin:20px 0"><div class="ava">🚀</div><h1>QuizUp Estudos</h1><p class="mut">Estude jogando. Suba de nível.</p></div>
+<div class="card"><h2 style="margin-top:0">Criar minha conta</h2>
+<label for="n">Nome</label><input id="n" autocomplete="name" placeholder="Como quer ser chamado(a)?">
+<label for="e">E-mail</label><input id="e" type="email" autocomplete="email" placeholder="voce@email.com">
+<p style="margin-top:8px"><b>Meu objetivo</b></p><div class="row wrap"><button class="chip on" onclick="obj(this)">🎯 ENEM</button><button class="chip" onclick="obj(this)">🛟 Reforço escolar</button></div>
+<p id="err" class="mut" role="alert" style="color:var(--er)"></p>
+<button class="btn" style="margin-top:10px" onclick="signup()">Começar a estudar</button>
+<button class="btn o" style="margin-top:10px" disabled>Entrar com Google (requer servidor)</button>
+<p class="mut" style="font-size:.85rem;margin-top:10px">Seus dados ficam salvos só neste aparelho. Nenhuma senha é guardada.</p></div>`},
+home(){const u=DB.u,w=DB.h.filter(h=>h.d>=ago(6)),x=XP()%500,s=streak();return`<div class="row sp"><div><p class="mut">Olá,</p><h1>${esc(u.n)}! 👋</h1></div><a class="pts" href="#conq">🔥 ${s} dia${s==1?"":"s"}</a></div>
+<div class="card hero" style="margin-top:14px"><div class="row sp"><b>Nível ${LV()}</b><b>${x} / 500 XP</b></div><div style="margin:10px 0">${bar(x/5)}</div><button class="btn y" onclick="startQuiz()">▶ ${DB.h.length?"Continuar estudando":"Começar a estudar"}</button></div>
+<h2>Atalhos</h2><div class="row wrap">${D.filter(d=>dq(d[0]).length).map(d=>`<button class="chip" onclick="startQuiz(dq('${d[0]}').map(q=>q.id))">${d[1]} ${d[0]}</button>`).join("")}</div>
+<h2>Sua semana</h2>${w.length?`<a href="#perf" class="card g g2" style="display:grid"><div><p class="mut">Questões</p><h1>${w.length}</h1></div><div><p class="mut">Acertos</p><h1>${acc(w)}%</h1></div></a>`:empty("📊","Ainda não há respostas nesta semana. Faça seu primeiro quiz!","Ver questões","bank")}`},
+disc(){return`<h1>Disciplinas</h1><p class="mut">Progresso = questões acertadas.</p><div class="g g2 g3" style="margin-top:12px">${D.map(d=>{const qs=dq(d[0]),n=qs.length,a=qs.filter(q=>DB.h.some(h=>h.id==q.id&&h.ok)).length,p=n?Math.round(a/n*100):0;return`<a class="card" ${n?`href="#bank" onclick="F.d='${d[0]}'"`:""} style="${n?"":"opacity:.7"}"><div class="ico">${d[1]}</div><h3 style="margin:8px 0">${d[0]}</h3>${n?bar(p)+`<p class="mut" style="font-size:.9rem">${a} de ${n} acertadas</p>`:`<p class="mut" style="font-size:.9rem">Sem questões ainda</p>`}</a>`}).join("")}</div>`},
+bank(){const u=k=>[...new Set(Q.map(q=>q[k]))],ch=(k,a)=>["Todas",...a].map(v=>`<button class="chip ${F[k]===v?"on":""}" onclick="F.${k}='${v}';go('bank')">${v}</button>`).join("");
+return`<h1>Banco de questões</h1><input type="search" aria-label="Buscar questões" placeholder="🔍 Buscar por assunto ou palavra" value="${esc(F.q)}" oninput="F.q=this.value;$('#ql').innerHTML=L()">
+<p><b>Disciplina</b></p><div class="row wrap">${ch("d",u("d"))}</div><p><b>Dificuldade</b></p><div class="row wrap">${ch("f",u("f"))}</div><p><b>Origem</b></p><div class="row wrap">${ch("g",u("g"))}</div>
+${API?GEN():""}<div class="g" id="ql" style="margin-top:14px">${L()}</div>`},
+quiz(){const q=Q.find(x=>x.id==S.ids[S.i]);return`<div class="row sp"><a href="#home" class="chip" aria-label="Sair do quiz">✕</a><b>Questão ${S.i+1} de ${S.ids.length}</b><span class="pts" id="tm">⏱ ${S.left}s</span></div>
+<div style="margin:12px 0">${bar(S.i/S.ids.length*100)}</div><div class="row sp"><span class="pts">⭐ ${S.sc} pts</span><span class="mut">${q.d} · ${q.t}</span></div>
+<div class="card" style="margin:12px 0"><p style="font-size:1.1rem">${q.q}</p></div>
+${q.o.map((o,i)=>`<button class="opt ${S.sel===i?"on":""}" onclick="S.sel=${i};go('quiz')" aria-pressed="${S.sel===i}"><span>${"ABCDE"[i]}</span>${o}</button>`).join("")}
+<div class="row"><button class="btn o" style="flex:1" onclick="answer(null)">Pular</button><button class="btn" style="flex:2" ${S.sel===null?"disabled":""} onclick="answer(S.sel)">Confirmar</button></div>`},
+fb(){const q=Q.find(x=>x.id==S.ids[S.i]),f=S.last;return`<div class="fb ${f.ok?"ok":"er"}"><div class="big">${f.ok?"🎉":f.skip?"⏭️":"😕"}</div><h1>${f.ok?"Acertou!":f.skip?"Questão pulada":"Quase lá!"}</h1><p>${f.ok?`<span class="pts">+${f.pts} pontos</span>`:"Resposta correta: "+"ABCDE"[q.c]+") "+q.o[q.c]}</p></div>
+<div class="card" style="margin:14px 0"><h3>💡 Como resolver</h3><p>${q.e}</p></div><button class="btn" onclick="next()">${S.i+1<S.ids.length?"Próxima questão":"Ver resultado"}</button>`},
+res(){const n=S.ids.length,er=n-S.ok-S.sk,nw=unl().filter(x=>!S.un0.includes(x)),ms=MD.filter(m=>nw.includes(m[1]));return`<div class="card hero" style="text-align:center"><div style="font-size:3rem">🏅</div><h1>Quiz concluído!</h1><h1 style="font-size:3rem">${S.sc} pts</h1><p>${S.ok} acerto${S.ok==1?"":"s"} · ${er} erro${er==1?"":"s"}${S.sk?" · "+S.sk+" pulada"+(S.sk>1?"s":""):""}</p><p><span class="pts">+${XP()-S.xp0} XP</span></p></div>
+<h2>Conquistas desbloqueadas</h2>${ms.length?`<div class="g g2">${ms.map(med).join("")}</div>`:`<p class="mut">Nenhuma nova conquista desta vez. Veja o progresso em <a href="#conq"><u>Conquistas</u></a>.</p>`}
+<div class="g" style="margin-top:16px"><button class="btn" onclick="startQuiz()">Próximo quiz</button><button class="btn o" onclick="startQuiz(S.ids)">↺ Refazer</button></div>`},
+rankLocal(){const w=DB.h.filter(h=>h.d>=ago(6)).reduce((a,h)=>a+(h.ok?30:5),0);return`<h1>Ranking</h1><h2>Sua pontuação</h2><div class="card row sp"><div class="row"><div class="ico">🙂</div><b>${esc(DB.u.n)}</b></div><span class="pts">${XP()} XP</span></div><p class="mut">Esta semana: ${w} XP</p>
+<div class="card empty" style="margin-top:14px"><div class="ico">🏆</div><h3>Ranking com outros estudantes</h3><p class="mut">Semanal, mensal, turma e amigos precisam de um servidor para reunir a pontuação de todo mundo. Enquanto isso, acompanhe sua evolução.</p></div>`},
+rank(){if(!SRV)return R.rankLocal();if(!RK)return`<h1>Ranking</h1><p class="mut">Carregando…</p>`;return`<h1>Ranking geral</h1><p class="mut">Por XP total, com estudantes reais deste site.</p><div class="g" style="margin-top:12px">${RK.length?RK.map((p,i)=>`<div class="card row sp" style="padding:12px;${p.eu?"border-color:var(--yel)":""}"><div class="row"><b style="width:32px">${i+1}º</b><b>${esc(p.nome)}${p.eu?" (você)":""}</b></div><span class="pts">${p.xp} XP</span></div>`).join(""):empty("🏆","Ninguém pontuou ainda. Faça um quiz!","Estudar","bank")}</div>`},
+conq(){return`<h1>Conquistas</h1><p class="mut">${unl().length} de ${MD.length} desbloqueadas</p><div class="g g2 g3" style="margin-top:12px">${MD.map(med).join("")}</div>`},
+perf(){if(!DB.h.length)return`<h1>Seu desempenho</h1>${empty("📈","Responda algumas questões para ver sua evolução, acertos por disciplina e recomendações.","Começar agora","bank")}`;
+const days=[6,5,4,3,2,1,0].map(n=>ago(n)),by=D.map(d=>[d[0],DB.h.filter(h=>h.c===d[0])]).filter(x=>x[1].length),st=by.filter(x=>acc(x[1])>=70),wk=by.filter(x=>acc(x[1])<60),rec=[...by].sort((a,b)=>acc(a[1])-acc(b[1]))[0];
+return`<h1>Seu desempenho</h1><h2>Acertos nos últimos 7 dias</h2><div class="card"><div class="cols">${days.map(d=>{const a=DB.h.filter(h=>h.d===d);return`<div><i style="height:${a.length?acc(a):0}%"></i>${new Date(d+"T12:00").toLocaleDateString("pt-BR",{weekday:"narrow"})}</div>`}).join("")}</div><p class="mut">Percentual de acerto por dia (vazio = sem respostas)</p></div>
+<h2>Acertos por disciplina</h2><div class="card g">${by.map(x=>`<div><div class="row sp"><span>${IC[x[0]]} ${x[0]}</span><b>${acc(x[1])}% (${x[1].length})</b></div>${bar(acc(x[1]))}</div>`).join("")}</div>
+<div class="g g2" style="margin-top:14px"><div class="card"><h3>💪 Pontos fortes</h3><p>${st.length?st.map(x=>x[0]).join(", "):"Ainda sem dados suficientes"}</p></div><div class="card"><h3>🎯 A melhorar</h3><p>${wk.length?wk.map(x=>x[0]).join(", "):"Nada abaixo de 60%"}</p></div></div>
+<div class="card hero" style="margin-top:14px"><h3>📌 Recomendado para hoje</h3><p>${esc(rec[0])}: ${acc(rec[1])}% de acerto até agora. Revise essa matéria.</p><button class="btn y" style="margin-top:8px" onclick="startQuiz(dq('${rec[0]}').map(q=>q.id))">Treinar agora</button></div>`},
+perfil(){const u=DB.u,ok=DB.h.filter(h=>h.ok).length;return`<div style="text-align:center"><div class="ava">${esc(u.n[0]||"?").toUpperCase()}</div><h1>${esc(u.n)}</h1><p class="mut">Nível ${LV()} · Objetivo: ${u.o}</p><p class="mut">${esc(u.e)}</p></div>
+<div class="g g2" style="margin:14px 0"><div class="card"><p class="mut">XP total</p><h1>${XP()}</h1></div><div class="card"><p class="mut">Questões</p><h1>${DB.h.length}</h1></div><div class="card"><p class="mut">Acertos</p><h1>${DB.h.length?acc(DB.h)+"%":"—"}</h1></div><div class="card"><p class="mut">Sequência</p><h1>${streak()} dia${streak()==1?"":"s"}</h1></div></div>
+<a class="btn o" href="#conq">🏅 Minhas conquistas</a><a class="btn o" href="#perf" style="margin-top:10px">📈 Meu desempenho</a>
+<h2>Configurações</h2><div class="card g"><label class="row sp" style="min-height:44px">Modo alto contraste<input type="checkbox" style="width:26px;min-height:26px;margin:0" ${u.hc?"checked":""} onchange="DB.u.hc=this.checked;sv();hc()"></label></div>
+<button class="btn o" id="del" style="margin-top:12px;color:var(--er);border-color:var(--er)" onclick="wipe(this)">Apagar meus dados</button>`}};
+let API=null,RK=null,SRV=false;
+const GEN=()=>`<div class="card" style="margin-top:14px"><h3>✨ Gerar questões com IA</h3><p class="mut" style="font-size:.9rem">Revise as questões geradas antes de usar em sala.</p>
+<label for="gd">Disciplina</label><select id="gd">${D.map(d=>`<option>${d[0]}</option>`).join("")}</select>
+<label for="ga">Assunto</label><input id="ga" placeholder="Ex.: Termodinâmica, Segunda Guerra">
+<div class="row"><div style="flex:1"><label for="gf">Dificuldade</label><select id="gf"><option>Fácil</option><option selected>Média</option><option>Difícil</option></select></div><div style="flex:1"><label for="gn">Quantidade</label><select id="gn"><option>1</option><option>3</option><option selected>5</option></select></div></div>
+${API.senha?`<label for="gs">Senha de professor</label><input id="gs" type="password">`:""}
+<p id="gm" role="status" class="mut"></p><button class="btn" id="gb" onclick="genQ()">Gerar questões</button></div>`;
+async function genQ(){const m=$("#gm"),b=$("#gb");m.style.color="";m.textContent="Gerando… pode levar alguns segundos.";b.disabled=true;
+try{const r=await fetch("/api/generate",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({d:$("#gd").value,assunto:$("#ga").value,f:$("#gf").value,n:+$("#gn").value,senha:$("#gs")?$("#gs").value:""})}),j=await r.json();
+if(!r.ok)throw new Error(j.erro);Q=j.questoes;F.d="Todas";F.f="Todas";F.g="IA (revisar)";go("bank")}catch(e){m.style.color="var(--er)";m.textContent=e.message;b.disabled=false}}
+function sync(){if(!SRV||!DB.u)return;if(!DB.u.id){DB.u.id=crypto.randomUUID();sv()}fetch("/api/score",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({uid:DB.u.id,nome:DB.u.n,xp:XP()})}).catch(()=>{})}
+function L(){const q=F.q.trim().toLowerCase(),r=Q.filter(x=>(F.d=="Todas"||x.d==F.d)&&(F.f=="Todas"||x.f==F.f)&&(F.g=="Todas"||x.g==F.g)&&(!q||(x.q+x.t+x.d).toLowerCase().includes(q)));
+return r.length?r.map(x=>`<div class="card"><div class="row sp wrap"><span class="pts">${IC[x.d]} ${x.d}</span><span class="mut">${x.f} · ${x.g}${DB.h.some(h=>h.id==x.id&&h.ok)?" · ✅":""}</span></div><p style="margin:10px 0"><b>${x.t}</b> — ${x.q.slice(0,80)}…</p><button class="btn s" onclick="startQuiz([${x.id}])">Resolver</button></div>`).join(""):empty("🔍","Nenhuma questão encontrada com esses filtros.")}
+function obj(b){b.parentNode.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));b.classList.add("on")}
+function signup(){const n=$("#n").value.trim(),e=$("#e").value.trim();if(!n||!/^\S+@\S+\.\S+$/.test(e)){$("#err").textContent="Informe seu nome e um e-mail válido.";return}DB.u={id:crypto.randomUUID(),n,e,o:$("#app .chip.on").textContent.replace(/^\S+\s/,"")};sv();go("home")}
+function wipe(b){if(b.dataset.s){DB={u:null,h:[]};sv();go("login")}else{b.dataset.s=1;b.textContent="Toque de novo para confirmar"}}
+function hc(){document.documentElement.dataset.hc=DB.u&&DB.u.hc?"on":"off"}
+function go(r){if(location.hash==="#"+r)render();else location.hash=r}
+function startQuiz(ids){if(!ids){const pend=Q.filter(q=>!DB.h.some(h=>h.id==q.id&&h.ok)),pool=(pend.length?pend:Q).map(q=>q.id);ids=pool.sort(()=>Math.random()-.5).slice(0,5)}
+Object.assign(S,{ids:[...ids],i:0,sc:0,ok:0,sk:0,sel:null,left:90,un0:unl(),xp0:XP()});go("quiz");tick()}
+function tick(){clearInterval(S.tm);S.tm=setInterval(()=>{S.left--;const e=$("#tm");if(e)e.textContent="⏱ "+S.left+"s";if(S.left<=0)answer(null)},1000)}
+function answer(i){clearInterval(S.tm);const q=Q.find(x=>x.id==S.ids[S.i]),ok=i===q.c,pts=ok?100+Math.max(0,S.left):0;
+if(i===null)S.sk++;else{DB.h.push({id:q.id,c:q.d,ok,d:today()});sv();if(ok){S.sc+=pts;S.ok++}}S.last={ok,pts,skip:i===null};go("fb")}
+function next(){S.sel=null;S.left=90;if(S.i+1<S.ids.length){S.i++;go("quiz");tick()}else{sync();go("res")}}
+function render(){let r=(location.hash||"#login").slice(1);if(!R[r])r="login";if(!DB.u)r="login";else if(r==="login")r="home";if(r!=="quiz")clearInterval(S.tm);
+if(["quiz","fb"].includes(r)&&!S.ids.length)r="home";hc();$("#app").innerHTML=R[r]();if(r==="rank"&&SRV)fetch("/api/ranking?uid="+encodeURIComponent(DB.u.id||"")).then(x=>x.json()).then(a=>{RK=a;if(location.hash==="#rank")$("#app").innerHTML=R.rank()}).catch(()=>{});const n=$("#nav");n.hidden=r==="login";
+const on={quiz:"bank",fb:"bank",res:"bank",conq:"perfil",perf:"home"}[r]||r;
+n.innerHTML=NAV.map(a=>`<a href="#${a[0]}" class="${a[0]===on?"on":""}" ${a[0]===on?'aria-current="page"':""}><b>${a[1]}</b>${a[2]}</a>`).join("");scrollTo(0,0)}
+addEventListener("hashchange",render);render();
+fetch("/api/status").then(r=>{if(!r.ok)throw 0;return r.json()}).then(s=>{SRV=true;API=s.ia?s:null;return fetch("/api/questions")}).then(r=>r.json()).then(a=>{if(a.length){Q=a;render()}}).catch(()=>{});
+</script></body></html>

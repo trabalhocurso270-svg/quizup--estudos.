@@ -1,1 +1,1 @@
-{ "name": "quizup-estudos", "version": "1.0.0", "private": true, "description": "App de estudos gamificado com quiz, banco SQLite e gerador de questões com IA", "scripts": { "start": "node server.js" }, "engines": { "node": ">=22.5" } }
+{ "name": "quizup-estudos", "version": "1.0.0", "private": true, "description": "App de estudos gamificado com quiz, MongoDB Atlas e gerador de questões com IA", "scripts": { "start": "node server.js" }, "dependencies": { "mongodb": "^6.9.0" }, "engines": { "node": ">=18" } }

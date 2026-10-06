@@ -71,6 +71,16 @@ O Render gratuito dorme após 15 minutos sem acessos, e acordar leva cerca de 1 
 
 No GitHub, abra o arquivo, clique no lápis, edite e faça **Commit changes**. O Render publica a nova versão sozinho.
 
+## 8. Login com Google (opcional)
+
+1. Abra **console.cloud.google.com** > **APIs e serviços** > **Credenciais** e abra o seu **ID do cliente OAuth** (tipo *Aplicativo da Web*). Se não tiver, crie um em **Criar credenciais** > **ID do cliente OAuth**.
+2. Em **Origens JavaScript autorizadas**, adicione `https://SEU-APP.onrender.com` (sem barra no final) e salve. Pode levar alguns minutos para valer.
+3. Copie o **ID do cliente** (termina em `.apps.googleusercontent.com`). Ele é público e não é segredo.
+4. No Render, em **Environment**, adicione `GOOGLE_CLIENT_ID` com esse ID. Nunca use o "segredo do cliente".
+5. Se o Google mostrar "app não verificado", em **Tela de consentimento OAuth** deixe o app em **Teste** e adicione os e-mails dos colegas em **Usuários de teste**.
+
+Sem a variável, o botão do Google aparece desativado e o cadastro por nome e e-mail continua funcionando.
+
 ## Problemas comuns
 
 - **Log "Falta a variável MONGODB_URI":** a variável não foi cadastrada no Render.
@@ -81,6 +91,8 @@ No GitHub, abra o arquivo, clique no lápis, edite e faça **Commit changes**. O
 - **"Falha na IA (código 404)":** o modelo não existe mais. Cadastre `GEMINI_MODEL` com um modelo Flash listado no AI Studio.
 - **"Limite gratuito da IA atingido":** espere um minuto (ou até o dia seguinte, se o limite diário acabou).
 - **"Senha incorreta":** a senha digitada é diferente de `GENERATE_PASSWORD`.
+- **Google: erro 400 `origin_mismatch`:** a URL do app não está nas Origens JavaScript autorizadas (passo 8.2).
+- **Google: "acesso bloqueado":** o app está em modo Teste e o e-mail não está em Usuários de teste.
 - **Primeiro acesso lento:** o servidor estava dormindo. O UptimeRobot reduz isso, mas o Render pode mudar as regras do plano gratuito.
 
 ## Segurança e limites

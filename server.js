@@ -6,7 +6,8 @@ const PORT = process.env.PORT || 3000;
 const KEY = process.env.GEMINI_API_KEY;                          // chave do Google AI Studio (nunca vai para o navegador)
 let MODEL = process.env.GEMINI_MODEL || "gemini-3-flash-preview";   // pode trocar pela variável GEMINI_MODEL
 const G = "https://generativelanguage.googleapis.com/v1beta/";
-const PASS = process.env.GENERATE_PASSWORD || "";                // opcional: protege a geração de questões
+const PASS = process.env.GENERATE_PASSWORD || "";
+const GCID = process.env.GOOGLE_CLIENT_ID || "";                 // ID de cliente OAuth (público) para "Entrar com Google"                // opcional: protege a geração de questões
 const DISC = ["Matemática","Português","Redação","Física","Química","Biologia","História","Geografia","Filosofia/Sociologia","Inglês"];
 
 const URI = process.env.MONGODB_URI;                               // string de conexão do MongoDB Atlas
@@ -59,7 +60,15 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
       return res.end(fs.readFileSync(path.join(__dirname, "index.html")));
     }
-    if (u === "/api/status") return send(res, 200, { ia: !!KEY, senha: !!PASS });
+    if (u === "/api/status") return send(res, 200, { ia: !!KEY, senha: !!PASS, google: GCID || null });
+    if (u === "/api/google" && req.method === "POST") {              // confere o login do Google no servidor
+      const b = await body(req);
+      if (!GCID) return send(res, 503, { erro: "Login com Google não configurado." });
+      const r = await fetch("https://oauth2.googleapis.com/tokeninfo?id_token=" + encodeURIComponent(String(b.credential || "")));
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || j.aud !== GCID || String(j.email_verified) !== "true" || !j.sub) return send(res, 401, { erro: "Login do Google inválido." });
+      return send(res, 200, { id: "g" + j.sub, nome: cl(j.name || String(j.email).split("@")[0]).slice(0, 40), email: j.email });
+    }
     if (u === "/api/questions") return send(res, 200, await list());
     if (u === "/api/ranking") {
       const me = url.searchParams.get("uid");

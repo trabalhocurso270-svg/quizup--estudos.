@@ -79,7 +79,7 @@ login(){return`<div style="text-align:center;margin:20px 0"><div class="ava">�
 <p style="margin-top:8px"><b>Meu objetivo</b></p><div class="row wrap"><button class="chip on" onclick="obj(this)">🎯 ENEM</button><button class="chip" onclick="obj(this)">🛟 Reforço escolar</button></div>
 <p id="err" class="mut" role="alert" style="color:var(--er)"></p>
 <button class="btn" style="margin-top:10px" onclick="signup()">Começar a estudar</button>
-<button class="btn o" style="margin-top:10px" disabled>Entrar com Google (requer servidor)</button>
+${GID?`<div id="gbtn" style="margin-top:12px;display:flex;justify-content:center"></div>`:`<button class="btn o" style="margin-top:10px" disabled>Entrar com Google (indisponível)</button>`}
 <p class="mut" style="font-size:.85rem;margin-top:10px">Seus dados ficam salvos só neste aparelho. Nenhuma senha é guardada.</p></div>`},
 home(){const u=DB.u,w=DB.h.filter(h=>h.d>=ago(6)),x=XP()%500,s=streak();return`<div class="row sp"><div><p class="mut">Olá,</p><h1>${esc(u.n)}! 👋</h1></div><a class="pts" href="#conq">🔥 ${s} dia${s==1?"":"s"}</a></div>
 <div class="card hero" style="margin-top:14px"><div class="row sp"><b>Nível ${LV()}</b><b>${x} / 500 XP</b></div><div style="margin:10px 0">${bar(x/5)}</div><button class="btn y" onclick="startQuiz()">▶ ${DB.h.length?"Continuar estudando":"Começar a estudar"}</button></div>
@@ -115,7 +115,7 @@ perfil(){const u=DB.u,ok=DB.h.filter(h=>h.ok).length;return`<div style="text-ali
 <a class="btn o" href="#conq">🏅 Minhas conquistas</a><a class="btn o" href="#perf" style="margin-top:10px">📈 Meu desempenho</a>
 <h2>Configurações</h2><div class="card g"><label class="row sp" style="min-height:44px">Modo alto contraste<input type="checkbox" style="width:26px;min-height:26px;margin:0" ${u.hc?"checked":""} onchange="DB.u.hc=this.checked;sv();hc()"></label></div>
 <button class="btn o" id="del" style="margin-top:12px;color:var(--er);border-color:var(--er)" onclick="wipe(this)">Apagar meus dados</button>`}};
-let API=null,RK=null,SRV=false;
+let API=null,RK=null,SRV=false,GID=null;
 const GEN=()=>`<div class="card" style="margin-top:14px"><h3>✨ Gerar questões com IA</h3><p class="mut" style="font-size:.9rem">Revise as questões geradas antes de usar em sala.</p>
 <label for="gd">Disciplina</label><select id="gd">${D.map(d=>`<option>${d[0]}</option>`).join("")}</select>
 <label for="ga">Assunto</label><input id="ga" placeholder="Ex.: Termodinâmica, Segunda Guerra">
@@ -125,6 +125,10 @@ ${API.senha?`<label for="gs">Senha de professor</label><input id="gs" type="pass
 async function genQ(){const m=$("#gm"),b=$("#gb");m.style.color="";m.textContent="Gerando… pode levar alguns segundos.";b.disabled=true;
 try{const r=await fetch("/api/generate",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({d:$("#gd").value,assunto:$("#ga").value,f:$("#gf").value,n:+$("#gn").value,senha:$("#gs")?$("#gs").value:""})}),j=await r.json();
 if(!r.ok)throw new Error(j.erro);Q=j.questoes;F.d="Todas";F.f="Todas";F.g="IA (revisar)";go("bank")}catch(e){m.style.color="var(--er)";m.textContent=e.message;b.disabled=false}}
+function initGoogle(){const el=$("#gbtn");if(!GID||!el)return;const draw=()=>{google.accounts.id.initialize({client_id:GID,callback:onGoogle});google.accounts.id.renderButton(el,{theme:"outline",size:"large",text:"signin_with",locale:"pt-BR",width:Math.min(320,el.clientWidth||320)})};
+if(window.google&&google.accounts)draw();else{const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.onload=draw;document.head.appendChild(s)}}
+async function onGoogle(resp){try{const r=await fetch("/api/google",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({credential:resp.credential})}),j=await r.json();if(!r.ok)throw 0;
+DB.u={id:j.id,n:j.nome,e:j.email,o:$("#app .chip.on").textContent.replace(/^\S+\s/,"")};sv();go("home")}catch(e){const m=$("#err");if(m)m.textContent="Não foi possível entrar com o Google. Tente de novo ou use nome e e-mail."}}
 function sync(){if(!SRV||!DB.u)return;if(!DB.u.id){DB.u.id=crypto.randomUUID();sv()}fetch("/api/score",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({uid:DB.u.id,nome:DB.u.n,xp:XP()})}).catch(()=>{})}
 function L(){const q=F.q.trim().toLowerCase(),r=Q.filter(x=>(F.d=="Todas"||x.d==F.d)&&(F.f=="Todas"||x.f==F.f)&&(F.g=="Todas"||x.g==F.g)&&(!q||(x.q+x.t+x.d).toLowerCase().includes(q)));
 return r.length?r.map(x=>`<div class="card"><div class="row sp wrap"><span class="pts">${IC[x.d]} ${x.d}</span><span class="mut">${x.f} · ${x.g}${DB.h.some(h=>h.id==x.id&&h.ok)?" · ✅":""}</span></div><p style="margin:10px 0"><b>${x.t}</b> — ${x.q.slice(0,80)}…</p><button class="btn s" onclick="startQuiz([${x.id}])">Resolver</button></div>`).join(""):empty("🔍","Nenhuma questão encontrada com esses filtros.")}
@@ -140,9 +144,9 @@ function answer(i){clearInterval(S.tm);const q=Q.find(x=>x.id==S.ids[S.i]),ok=i=
 if(i===null)S.sk++;else{DB.h.push({id:q.id,c:q.d,ok,d:today()});sv();if(ok){S.sc+=pts;S.ok++}}S.last={ok,pts,skip:i===null};go("fb")}
 function next(){S.sel=null;S.left=90;if(S.i+1<S.ids.length){S.i++;go("quiz");tick()}else{sync();go("res")}}
 function render(){let r=(location.hash||"#login").slice(1);if(!R[r])r="login";if(!DB.u)r="login";else if(r==="login")r="home";if(r!=="quiz")clearInterval(S.tm);
-if(["quiz","fb"].includes(r)&&!S.ids.length)r="home";hc();$("#app").innerHTML=R[r]();if(r==="rank"&&SRV)fetch("/api/ranking?uid="+encodeURIComponent(DB.u.id||"")).then(x=>x.json()).then(a=>{RK=a;if(location.hash==="#rank")$("#app").innerHTML=R.rank()}).catch(()=>{});const n=$("#nav");n.hidden=r==="login";
+if(["quiz","fb"].includes(r)&&!S.ids.length)r="home";hc();$("#app").innerHTML=R[r]();if(r==="login")initGoogle();if(r==="rank"&&SRV)fetch("/api/ranking?uid="+encodeURIComponent(DB.u.id||"")).then(x=>x.json()).then(a=>{RK=a;if(location.hash==="#rank")$("#app").innerHTML=R.rank()}).catch(()=>{});const n=$("#nav");n.hidden=r==="login";
 const on={quiz:"bank",fb:"bank",res:"bank",conq:"perfil",perf:"home"}[r]||r;
 n.innerHTML=NAV.map(a=>`<a href="#${a[0]}" class="${a[0]===on?"on":""}" ${a[0]===on?'aria-current="page"':""}><b>${a[1]}</b>${a[2]}</a>`).join("");scrollTo(0,0)}
 addEventListener("hashchange",render);render();
-fetch("/api/status").then(r=>{if(!r.ok)throw 0;return r.json()}).then(s=>{SRV=true;API=s.ia?s:null;return fetch("/api/questions")}).then(r=>r.json()).then(a=>{if(a.length){Q=a;render()}}).catch(()=>{});
+fetch("/api/status").then(r=>{if(!r.ok)throw 0;return r.json()}).then(s=>{SRV=true;GID=s.google||null;API=s.ia?s:null;return fetch("/api/questions")}).then(r=>r.json()).then(a=>{if(a.length)Q=a;render()}).catch(()=>{});
 </script></body></html>
